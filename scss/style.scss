@@ -1,0 +1,344 @@
+// @import "components/fontface";
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/s/opensans/v10/cJZKeOuBrn4kERxqtaUH3ZBw1xU1rKptJj_0jans920.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+$tt-nav-hit-area:         44px;
+$tt-nav-icon-size:        16px;
+$orange:                  #f53200;
+$purple:                  #63f;
+$accent-color:            $purple;
+$tt-nav-color:            #fff;
+$tt-nav-background:       #111;
+$tt-nav-borders:          lighten($tt-nav-background, 10%);
+$tt-nav-border-radius:    3px;
+$tt-nav-toggle-text:"";
+$tt-nav-open-toggle-text: " \00D7";
+$tt-nav-breakpoint:       55em;
+$width-1of7: (100 / 7) * 1%;
+%reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+%hem {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.tt-nav {
+
+  position: relative;
+  max-width: 20em;
+  overflow: hidden;
+  font-size: 14px;
+  font-size: .875rem;
+
+  /* Now show full width */
+  @media (min-width: $tt-nav-breakpoint) {
+    overflow: visible; // allow dropdown to be seen
+    float: left;
+    width: 100%;
+    max-width: 100%;
+    padding-top: 1rem;
+    background-color: $tt-nav-color;
+  }
+
+}
+
+/* Class added via JS when toggled open */
+.tt-nav--open {
+  overflow: visible; // allow dropdown to be seen
+}
+
+.tt-nav__list {
+
+  @extend %reset;
+  border-bottom-right-radius: $tt-nav-border-radius;
+  border-bottom-left-radius: $tt-nav-border-radius;
+  width: 100%;
+
+  /**
+   * Hide nav by default only when JS is running and viewport is less than
+   * navigation breakpoint.
+   * The wrapper has 'overflow: hidden;' which hides it.
+   */
+@media (max-width: $tt-nav-breakpoint) {
+  background-color: $tt-nav-background;
+  .js & {
+    position: absolute;
+    margin-left: .75rem;
+  }
+}
+
+/* Remove background */
+@media (min-width: $tt-nav-breakpoint) {
+  background: none;
+}
+
+}
+
+.tt-nav__item { 
+  border-top: 1px solid $tt-nav-borders;
+  position: relative;
+
+  /* Change from stacked to display in a row */
+  @media (min-width: $tt-nav-breakpoint) {
+    float: left;
+    width: $width-1of7;
+    border-top: none; // separator no longer needed
+    padding: 0 1px;
+    box-sizing: border-box;
+  }
+
+}
+
+%tt-nav__link {
+  display: block;
+  white-space: nowrap;
+  padding-right: ($tt-nav-hit-area - $tt-nav-icon-size) / 2;
+  padding-left:  ($tt-nav-hit-area - $tt-nav-icon-size) / 2;
+  line-height: $tt-nav-hit-area; 
+}
+
+.tt-nav__link {
+  position: relative;
+  background-color: $tt-nav-background;
+  color: $tt-nav-color;
+
+  @extend %tt-nav__link;
+
+  /* Background now gone so change link colour */
+  @media (min-width: $tt-nav-breakpoint) {
+    transition: background-color .25s;
+    text-align: center;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    &:hover {
+      background-color: $accent-color;
+    }
+  }
+
+}
+.is-active .tt-nav__link {
+  @media (max-width: $tt-nav-breakpoint) {
+    background-color: $accent-color;
+  }
+}
+.tt-nav__link::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 8px;
+  top: 50%;
+  right: 1.5em;
+  margin-top:-4px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAMAAADeWG8gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRFqqqqAAAABaH1EQAAAAJ0Uk5T/wDltzBKAAAAM0lEQVR42nzIUQoAIAzD0Ob+lxYE2Wat+QpP8nB40WUEYsomhkSiSyaaHKLkR6jOaQkwAC7CAH89ejUHAAAAAElFTkSuQmCC);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  z-index: 2;
+}
+.tt-nav__submenu a {
+  @extend %tt-nav__link;
+  @extend %hem;
+  font-size: 12px;
+  font-size: .75rem;
+
+  transition: background-color .25s,color .5s .5s,border-color 1s 1.5s;
+
+  @media (max-width: $tt-nav-breakpoint) {
+    color: $tt-nav-color;
+    background-color: $tt-nav-background;
+  }
+  @media (min-width: $tt-nav-breakpoint) {
+    color: transparent;
+    background-color: transparent;
+  }
+}
+
+.tt-nav__item:hover .tt-nav__submenu a {
+  @media (min-width: $tt-nav-breakpoint) {
+    color: $tt-nav-color;
+  }
+  border-top-color: rgba(white,.1);
+  border-bottom-color: rgba(black,.95);
+}
+
+.tt-nav__item:hover .tt-nav__submenu a,
+.is-active .tt-nav__submenu a {
+
+  /* Background now gone so change link colour */
+  @media (min-width: $tt-nav-breakpoint) {
+    &:hover {
+      background-color: $accent-color;
+    }
+  }
+
+}
+.js .tt-nav__submenu .is-selected {
+  @media (max-width: $tt-nav-breakpoint) {
+    color: $tt-nav-color;
+    background-color: $accent-color;
+  }
+}
+
+
+/**
+ * TOGGLE BUTTON
+ * =============
+ *
+ * <a> element inserted via JavaScript which toggles the nav.
+ *
+ * [1] Match the navigation link styles.
+ * [2] So toggle button width is at least the hit-area size, but can grow.
+ */
+
+.tt-nav__toggle {
+
+  @extend %tt-nav__link;
+
+  display: inline-block;
+  color: $tt-nav-color;
+  background: $accent-color;
+  min-width: $tt-nav-hit-area;
+  min-height: $tt-nav-hit-area;
+  border-radius: $tt-nav-border-radius;
+  box-sizing: border-box;
+  position: relative;
+  margin-top: 1.5rem;
+  margin-left: .75rem;
+
+  /* Content for toggle button */
+
+  &:before,
+  &:after {
+    position: absolute;
+    display: inline-block;
+    top:0;right:0;bottom:0;left:0;
+    line-height: 1;
+    z-index: 1;
+  }
+  &:before {
+    content: $tt-nav-toggle-text;
+    font-size: $tt-nav-icon-size;
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    box-shadow: 0 4px 0 0 $accent-color,0 6px 0 0 #fff;
+    margin: 1rem .75rem 1.25em;
+  }
+
+  &:after {
+    content: "Menu";
+    position: absolute;
+    margin-top: -1rem;
+    color: #111;
+    padding-left: .125rem;
+  } 
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  /* Menu open styles */
+  .tt-nav--open & {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+
+    /* Change hamburger icon to a close icon */
+    &:before {
+      content: $tt-nav-open-toggle-text;
+      border: 0;
+      box-shadow: none;
+      margin: 22% 30%;
+      font-size: 1.5rem;
+    }
+
+  }
+
+  /* Now hide the toggle button as menu show by default */
+  @media (min-width: $tt-nav-breakpoint) {
+    display: none;
+  }
+
+}
+/* Submenu */
+.tt-nav__submenu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  @media (min-width: $tt-nav-breakpoint) {
+    position: absolute;
+    left: -9999px;
+    top: 100%;
+    height: 0;
+    overflow: hidden;
+    z-index: 9;
+    background-color: $accent-color;
+    background-color: transparentize($accent-color,.125);
+    margin-left: 2px;
+    margin-right: 2px;
+    transition: padding-bottom .75s cubic-bezier(0.6, 0.4, 0.25, 0.75),background-color 2s;
+  }
+}
+
+.tt-nav__item:hover .tt-nav__submenu {
+  @media (min-width: $tt-nav-breakpoint) {
+    left: 0;
+    right: 0;
+    background-color: rgba(black,.9);
+  }
+}
+ 
+/* hide the submenu's on mobile when there is javascript */
+.js .tt-nav__submenu {
+  @media (max-width: $tt-nav-breakpoint) {
+    height: 0;
+    overflow: hidden;
+    transition: padding-bottom .3s cubic-bezier(0.6, 0.4, 0.25, 0.75);
+  }
+}
+
+/* show them when touched  fall-back */
+.is-active .tt-nav__submenu {
+  @media (max-width: $tt-nav-breakpoint) {
+    padding-bottom: 150%;
+  }
+}
+
+$item-count-list: 1 2 3 4 5 6 7 8 9 10;
+$item-value-list: 46px 92px 138px 184px 230px 276px 322px 368px 414px 460px;
+// declarations for small screen
+@for $i from 1 through length($item-count-list) {
+  .is-active[class*="itemcount-#{$i}"] .tt-nav__submenu {
+   @media (max-width: $tt-nav-breakpoint) {
+      padding-bottom: nth($item-value-list, $i);
+   }
+  }
+}
+// declarations for wide screen
+@for $i from 1 through length($item-count-list) {
+  [class*="itemcount-#{$i}"]:hover .tt-nav__submenu {
+    @media (min-width: $tt-nav-breakpoint) {
+      padding-bottom: nth($item-value-list, $i);
+   }
+  }
+}
+/**
+ * General styles
+ */
+html {
+  font-size: 16px;
+}
+body {
+  font: 100%/1.375 "Open Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+a {
+  text-decoration: none;
+}
